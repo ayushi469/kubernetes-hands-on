@@ -26,3 +26,7 @@ This repository contains my **hands-on experience with Kubernetes** using **Mini
 
 ```bash
 brew install minikube
+minikube start --driver=docker
+minikube ssh
+# On Mac, kubectl might already be installed with Minikube
+kubectl version --client

@@ -47,10 +47,59 @@ If you face permission issues, add your user (default ubuntu) to the Docker grou
 sudo usermod -aG docker $USER
 ```
 
-## Lab 1: Create a Cluster
+## Lab 1: Create a Namespace
 
 ```
 kubectl get ns                             # List all namespaces
 kubectl create namespace dev               # Create namespace 'dev'
 kubectl config set-context --current --namespace=dev  # Switch to 'dev'
 ```
+
+## Lab 2: Create a Pod
+
+```
+kubectl apply -f pod.yml                   # Create or update pod
+kubectl get pods                           # List pods in current namespace
+kubectl get pods -A                        # List pods in all namespaces
+kubectl describe pod <pod-name>            # Detailed info about pod
+kubectl logs <pod-name>                     # View pod logs
+kubectl get pods -w                         # Watch pods live
+kubectl exec -it <pod-name> -- /bin/bash   # Enter container shell
+```
+
+Example of pod.yml
+
+<img width="399" height="359" alt="image" src="https://github.com/user-attachments/assets/511add9c-f447-4894-87b2-2dd8ca0da64f" />
+
+
+## Lab 3: ReplicaSets
+
+```
+kubectl get rs                     # List ReplicaSets
+kubectl apply -f replicas.yml      # Create ReplicaSets
+
+```
+
+Example of replicas.yml
+
+<img width="506" height="597" alt="image" src="https://github.com/user-attachments/assets/4cb41d98-7833-42c8-aab7-e5a873ebe7c6" />
+
+## Lab 4: Deployments
+
+```
+kubectl get deployments
+kubectl rollout status deployment/<deployment-name>   # Check rollout status
+kubectl rollout undo deployment/<deployment-name>    # Undo deployment
+
+```
+#### Best practice in production
+
+1. Rollback is usually done via GitOps: revert the Git commit → CI/CD redeploys previous stable version.
+
+2. Manual rollback with kubectl rollout undo is avoided in production.
+
+Example of deployment.yml
+
+<img width="900" height="782" alt="image" src="https://github.com/user-attachments/assets/0ce583dd-5625-4372-9f3a-6955396f4a86" />
+
+

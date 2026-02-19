@@ -47,3 +47,9 @@ Minikube with Docker driver is designed to run as a normal user, not root.
 
 If you face permission issues, add your user (default ubuntu) to the Docker group:
 sudo usermod -aG docker $USER
+
+## Lab 1: Create a Cluster
+
+kubectl get ns                             # List all namespaces
+kubectl create namespace dev               # Create namespace 'dev'
+kubectl config set-context --current --namespace=dev  # Switch to 'dev'

@@ -37,8 +37,6 @@ kubectl version --client
 - Kubernetes runs **inside a Docker container**, with a **single-node cluster**.
 - This method avoids needing a VM and integrates easily with Docker Desktop.
 
----
-
 Run kubectl without sudo:
 
 kubectl communicates with the Kubernetes API server, fetching resource info from etcd.
@@ -47,6 +45,8 @@ Minikube with Docker driver is designed to run as a normal user, not root.
 
 If you face permission issues, add your user (default ubuntu) to the Docker group:
 sudo usermod -aG docker $USER
+
+---
 
 ## Lab 1: Create a Cluster
 

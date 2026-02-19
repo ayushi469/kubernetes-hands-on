@@ -102,4 +102,78 @@ Example of deployment.yml
 
 <img width="900" height="782" alt="image" src="https://github.com/user-attachments/assets/0ce583dd-5625-4372-9f3a-6955396f4a86" />
 
+## Lab 5: Services 
+
+```
+
+kubectl get svc                 # List services
+kubectl describe svc <svc-name> # Describe service
+
+```
+#### Important Points :
+
+ 1. Clusterip : it is the ip assigned to service by kubernetes. pod can be communicate within cluster through this ip : https://service-ip-address:port
+
+2. External Ip : Kubernetes cannot directly assign the ip to access the client outside the cluster. so in nodeport type service, client can access the application through the ***nodeip:port***.
+3. In load balancer service, cloud provider assign the ip to the service and client can access the application through that ip address.
+4. If in service if port is other than 80/443, client can access the service if the service is load balancer then ***https://ip-address:port-number***. If it is 80/443, it can be access directly without port.
+
+### Service Types :
+
+| Type         | Description                                                      |
+| ------------ | ---------------------------------------------------------------- |
+| ClusterIP    | Internal cluster communication only                              |
+| NodePort     | Accessible externally via `NodeIP:NodePort` (range: 30000–32767) |
+| LoadBalancer | Cloud provider assigns external IP to service                    |
+
+#### Flow of Nodeport service:
+
+              🌍 External User (Browser)
+                           |
+                           |
+                           v
+                http://<NodeIP>:30513
+                           |
+                           |   (1) NodePort
+                           v
+        ┌──────────────────────────────────┐
+        │          Kubernetes Node         │
+        │                                  │
+        │   NodePort: 30513                │
+        │        |                         │
+        │        v                         │
+        │   Service Port: 8080             │
+        │        |                         │
+        │        v                         │
+        │   Pod IP: 10.x.x.x               │
+        │        |                         │
+        │        v                         │
+        │   Container Port: 80 (nginx)     │
+        └──────────────────────────────────┘
+
+Example of service.yml
+
+<img width="435" height="412" alt="image" src="https://github.com/user-attachments/assets/f2172ed9-c537-4b4a-9c56-1347b3d15710" />
+
+
+## Lab 6: ConfigMaps 
+
+```
+
+kubectl get cm
+kubectl describe cm <configmap-name>
+kubectl exec -it <pod-name> -- /bin/bash
+env | grep <KEY_NAME>
+
+```
+
+Example of configmap.yml
+
+<img width="309" height="249" alt="image" src="https://github.com/user-attachments/assets/cd300834-3738-464b-87be-50f18c90ee9e" />
+
+Example of deployment.yml with volume mounts:
+
+<img width="988" height="838" alt="image" src="https://github.com/user-attachments/assets/47b75599-1c85-412f-89ae-5ab60ca2c5ac" />
+
+
 

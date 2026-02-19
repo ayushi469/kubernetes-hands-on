@@ -49,6 +49,8 @@ sudo usermod -aG docker $USER
 
 ## Lab 1: Create a Cluster
 
+```
 kubectl get ns                             # List all namespaces
 kubectl create namespace dev               # Create namespace 'dev'
 kubectl config set-context --current --namespace=dev  # Switch to 'dev'
+```

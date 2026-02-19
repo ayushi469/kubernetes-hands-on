@@ -20,9 +20,9 @@ This repository contains my **hands-on experience with Kubernetes** using **Mini
 
 ## Setup Minikube
 
-### On Mac
+### Setup on Docker Desktop (Mac)
+
+1. **Install Minikube**:
 
 ```bash
 brew install minikube
-minikube start --driver=docker
-minikube ssh

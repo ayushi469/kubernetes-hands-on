@@ -49,7 +49,7 @@ sudo usermod -aG docker $USER
 
 ## Lab 1: Create a Namespace
 
-```
+```shell
 kubectl get ns                             # List all namespaces
 kubectl create namespace dev               # Create namespace 'dev'
 kubectl config set-context --current --namespace=dev  # Switch to 'dev'
@@ -57,7 +57,7 @@ kubectl config set-context --current --namespace=dev  # Switch to 'dev'
 
 ## Lab 2: Create a Pod
 
-```
+```cat
 kubectl apply -f pod.yml                   # Create or update pod
 kubectl get pods                           # List pods in current namespace
 kubectl get pods -A                        # List pods in all namespaces

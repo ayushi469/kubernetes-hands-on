@@ -69,8 +69,21 @@ kubectl exec -it <pod-name> -- /bin/bash   # Enter container shell
 
 Example of pod.yml
 
-<img width="399" height="359" alt="image" src="https://github.com/user-attachments/assets/511add9c-f447-4894-87b2-2dd8ca0da64f" />
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app: web-app
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports: 
+     - containerPort: 80
 
+```
 
 ## Lab 3: ReplicaSets
 
@@ -82,7 +95,32 @@ kubectl apply -f replicas.yml      # Create ReplicaSets
 
 Example of replicas.yml
 
-<img width="506" height="597" alt="image" src="https://github.com/user-attachments/assets/4cb41d98-7833-42c8-aab7-e5a873ebe7c6" />
+```yaml
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: replicas
+  labels:
+    app: replics
+spec:
+  replicas: 3
+  selector: 
+    matchLabels:
+      app: replic-web
+  template:
+    metadata:
+      labels:
+        app: replic-web
+    spec:
+      containers:
+        - name: replica-container
+          image: nginx:1.14.2
+          ports:
+           - containerPort: 80
+ 
+
+```
+
 
 ## Lab 4: Deployments
 
@@ -100,7 +138,42 @@ kubectl rollout undo deployment/<deployment-name>    # Undo deployment
 
 Example of deployment.yml
 
-<img width="900" height="782" alt="image" src="https://github.com/user-attachments/assets/0ce583dd-5625-4372-9f3a-6955396f4a86" />
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment
+  labels: 
+    app: Deployment-controller
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: deployment-pod
+  template:
+    metadata:
+      labels:
+        app: deployment-pod
+    spec:
+      containers:
+      - name: deployment-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        # envFrom:
+        # - configMapRef:
+        #     name: test-configmap
+        volumeMounts:
+          - name: config-mount-volume
+            mountPath: /app/config
+      volumes:
+        - name: config-mount-volume ## volumemounts.name and volumes.name should be the same.
+          configMap:
+            name: volume-mount-config-map
+        
+
+```
+
 
 ## Lab 5: Services 
 
@@ -153,7 +226,19 @@ kubectl describe svc <svc-name> # Describe service
 
 Example of service.yml
 
-<img width="435" height="412" alt="image" src="https://github.com/user-attachments/assets/f2172ed9-c537-4b4a-9c56-1347b3d15710" />
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-service
+spec:
+  type: NodePort
+  selector:
+    app: deployment-pod
+  ports:
+  - port: 8080
+    targetPort: 80
+```
 
 
 ## Lab 6: ConfigMaps 
@@ -169,11 +254,81 @@ env | grep <KEY_NAME>
 
 Example of configmap.yml
 
-<img width="309" height="249" alt="image" src="https://github.com/user-attachments/assets/cd300834-3738-464b-87be-50f18c90ee9e" />
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: volume-mount-config-map
+  labels:
+    app: volume-mount-config-map
+data:
+  db-username: "ayushi"
 
-Example of deployment.yml with volume mounts:
+```
 
-<img width="988" height="838" alt="image" src="https://github.com/user-attachments/assets/47b75599-1c85-412f-89ae-5ab60ca2c5ac" />
+And uses of configmap in deployment.yml
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment
+  labels: 
+    app: Deployment-controller
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: deployment-pod
+  template:
+    metadata:
+      labels:
+        app: deployment-pod
+    spec:
+      containers:
+      - name: deployment-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        envFrom:
+        - configMapRef:
+            name: test-configmap
+        
+```
+
+Example of deployment.yml with volume mounts of configmap sets:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment
+  labels: 
+    app: Deployment-controller
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: deployment-pod
+  template:
+    metadata:
+      labels:
+        app: deployment-pod
+    spec:
+      containers:
+      - name: deployment-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: config-mount-volume
+            mountPath: /app/config
+      volumes:
+        - name: config-mount-volume ## volumemounts.name and volumes.name should be the same.
+          configMap:
+            name: volume-mount-config-map
+        
+```
 
 
 

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: replicas
+  labels:
+    app: replics
+spec:
+  replicas: 3
+  selector: 
+    matchLabels:
+      app: replic-web
+  template:
+    metadata:
+      labels:
+        app: replic-web
+    spec:
+      containers:
+        - name: replica-container
+          image: nginx:1.14.2
+          ports:
+           - containerPort: 80
+ 

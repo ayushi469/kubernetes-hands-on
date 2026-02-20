@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apache-deployment
+  labels:
+    app: test-apache-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ingress-apache-deployment
+  template:
+    metadata:
+      labels:
+        app: ingress-apache-deployment
+    spec:
+      containers:
+      - name: apache-container
+        image: httpd:2.4
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: apache-volume
+          mountPath: /app/config
+          readOnly: true
+      volumes:
+      - name: apache-volume
+        configMap:
+          name: apache-configmap

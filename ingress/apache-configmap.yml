@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-configmap
+  labels:
+    app: apache-configmap
+data:
+  apache_username: "apache"
+  apache_password: "apachepassword"

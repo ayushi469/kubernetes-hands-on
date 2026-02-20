@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-configmap
+  labels:
+    app: nginx-configmap
+data:
+  nginx_username: "nginx"
+  nginx_password: "nginxpassword"

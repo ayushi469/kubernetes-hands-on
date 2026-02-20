@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: apache-service
+  labels:
+    app: apache-service
+spec:
+  type: ClusterIP
+  selector:
+    app: ingress-apache-deployment
+  ports:
+  - port: 8080 
+    targetPort: 8080

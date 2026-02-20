@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ngnix-deployment
+  labels:
+    app: test-nginx-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ingress-nginx-deployment
+  template:
+    metadata:
+      labels:
+        app: ingress-nginx-deployment
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx:latest
+        ports:
+        - containerPort: 9090
+        volumeMounts:
+        - name: nginx-volume
+          mountPath: /app/config
+      volumes:
+      - name: nginx-volume
+        configMap:
+          name: nginx-configmap
+    

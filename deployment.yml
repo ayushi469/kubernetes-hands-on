@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment
+  labels: 
+    app: Deployment-controller
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: deployment-pod
+  template:
+    metadata:
+      labels:
+        app: deployment-pod
+    spec:
+      containers:
+      - name: deployment-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        # envFrom:
+        # - configMapRef:
+        #     name: test-configmap
+        volumeMounts:
+          - name: config-mount-volume
+            mountPath: /app/config
+      volumes:
+        - name: config-mount-volume ## volumemounts.name and volumes.name should be the same.
+          configMap:
+            name: volume-mount-config-map
+        

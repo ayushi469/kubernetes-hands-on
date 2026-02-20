@@ -404,6 +404,52 @@ stringData:
 ```
 - This installs the NGINX Ingress Controller.
 
+### 📌 Important Points About Ingress Controller
+
+1.  The **Ingress Controller** runs inside the Kubernetes cluster as a Pod.
+2.  Services are ususally creates as ***ClusterIp*** Service.
+3.  Since the Ingress Controller lives inside the cluster, it routes traffic to internal services.
+4.  As ingress lives inside the cluster, to expose the service outside the cluster, we use a load balancer which provides the external ip to access that service.
+5.  When the Ingress Controller is installed, Kubernetes creates:
+        - Deployment
+        - ReplicaSet
+        - Pods
+        - A Service (NodePort or LoadBalancer depending on environment)
+6. In cloud platforms (e.g., AWS):
+        - The LoadBalancer service gets an external IP address.
+        - External users access the application through that IP.
+        - Traffic flow: Internet → LoadBalancer → Ingress Controller → ClusterIP Service → Pod
+7.  Through load balancer service of ingress controller, aws externally assign the ip address to the service and we can access our internally in-build service through our ingress controller.
+
+Example of ingress.yml
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-controller
+  labels:
+    app: ingress-controller
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /nginx
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-service  ## this is metadata.name not metadata.labels
+            port:
+              number: 9090
+      - path: /apache
+        pathType: Prefix
+        backend:
+          service: 
+            name: apache-service
+            port:
+              number: 8080
+
+```
 
 
 

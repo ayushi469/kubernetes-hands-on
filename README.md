@@ -49,7 +49,7 @@ sudo usermod -aG docker $USER
 
 ## Lab 1: Create a Namespace
 
-```shell
+```bash
 kubectl get ns                             # List all namespaces
 kubectl create namespace dev               # Create namespace 'dev'
 kubectl config set-context --current --namespace=dev  # Switch to 'dev'
@@ -57,7 +57,7 @@ kubectl config set-context --current --namespace=dev  # Switch to 'dev'
 
 ## Lab 2: Create a Pod
 
-```cat
+```bash
 kubectl apply -f pod.yml                   # Create or update pod
 kubectl get pods                           # List pods in current namespace
 kubectl get pods -A                        # List pods in all namespaces
@@ -87,7 +87,7 @@ spec:
 
 ## Lab 3: ReplicaSets
 
-```
+```bash
 kubectl get rs                     # List ReplicaSets
 kubectl apply -f replicas.yml      # Create ReplicaSets
 
@@ -124,7 +124,7 @@ spec:
 
 ## Lab 4: Deployments
 
-```
+```bash
 kubectl get deployments
 kubectl rollout status deployment/<deployment-name>   # Check rollout status
 kubectl rollout undo deployment/<deployment-name>    # Undo deployment
@@ -177,8 +177,7 @@ spec:
 
 ## Lab 5: Services 
 
-```
-
+```bash
 kubectl get svc                 # List services
 kubectl describe svc <svc-name> # Describe service
 
@@ -243,13 +242,11 @@ spec:
 
 ## Lab 6: ConfigMaps 
 
-```
-
+```bash
 kubectl get cm
 kubectl describe cm <configmap-name>
 kubectl exec -it <pod-name> -- /bin/bash
 env | grep <KEY_NAME>
-
 ```
 
 Example of configmap.yml
@@ -330,5 +327,81 @@ spec:
         
 ```
 
+## Lab 7: Secrets :
+
+```bash
+kubectl get secrets
+kubectl describe secret test-secrets
+```
+
+### Important point about secrets
+
+1. Secrets are used to store sensitive information such as: Passwords, API keys, Tokens, SSH keys
+2. Secrets are Base64-encoded, but NOT encrypted by default.
+3. Secrets can be: Mounted as files inside Pods or Injected as environment 
+4. Kubernetes stores secrets in etcd (encoded format).
+5. When running:
+    ```bash
+    kubectl get secrets
+    ```
+    Note: Kubernetes displays the Base64-encoded values, not the decoded content.
+
+#### Extra bonus point :
+  ```bash
+      echo -n "admin" | base64
+  ```
+  This converts plain text into Base64 format.
+
+### Using stringData (Recommended)
+
+1. Instead of manually encoding values, you can use stringData.
+2. Kubernetes will automatically:
+    a). Encode the values
+    b). Store them in Base64 format
+    c). Decode them inside the Pod when used
+
+#### ⚠️ Security Note
+
+1. Base64 encoding is NOT encryption. It only converts data into an encoded format.
+2. For stronger security, enable:
+    a). Encryption at rest
+    b). External secret managers (e.g., Vault, AWS Secrets Manager)
+
+
+### Example of secrets.yml with stringdata
+
+```yaml
+  apiVersion: v1
+kind: Secret
+metadata:
+  name: encoded-secret
+  labels:
+    app: secrets
+type: Opaque
+stringData:
+  db_username: "admin"
+  db_password: "adminpassword"
+```
+
+### Example of secrets.yml without strindata
+
+```yaml
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: test-secrets
+    labels:
+      app: test-secrets
+  data:
+    db-password: c3VwZXJzZWNyZXQ=
+```
+
+## Lab - 7: Ingress Controller
+
+### 🚀 Enable Ingress in Minikube
+```bash
+  minikube enable ingress
+```
+- This installs the NGINX Ingress Controller. 
 
 

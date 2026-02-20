@@ -175,7 +175,7 @@ spec:
 ```
 
 
-## Lab 5: Services 
+## Lab 5: Services
 
 ```bash
 kubectl get svc                 # List services
@@ -240,7 +240,7 @@ spec:
 ```
 
 
-## Lab 6: ConfigMaps 
+## Lab 6: ConfigMaps
 
 ```bash
 kubectl get cm
@@ -327,7 +327,7 @@ spec:
         
 ```
 
-## Lab 7: Secrets :
+## Lab 7: Secrets
 
 ```bash
 kubectl get secrets
@@ -396,7 +396,7 @@ stringData:
     db-password: c3VwZXJzZWNyZXQ=
 ```
 
-## Lab - 7: Ingress Controller
+## Lab 8: Ingress Controller
 
 ### 🚀 Enable Ingress in Minikube
 ```bash
